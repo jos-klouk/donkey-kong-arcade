@@ -6,6 +6,8 @@ import { loadStage } from '../level/loader'
 import { spawnStageEntities } from '../level/spawners'
 import { resolveAABBCollision } from '../physics/collide'
 import { intersects as aabbIntersects } from '../physics/aabb'
+import { setSeed, next as rngNext } from './rng'
+import { isDown } from '../input/keyboard'
 
 const STEP = 1000 / 60 // 60 FPS fixed timestep
 let accumulator = 0
@@ -59,6 +61,7 @@ function update(deltaTime: number) {
   const solidEntities = world.entities.filter(e => e.type === 'Platform')
   const dynamicEntities = world.entities.filter(e => e.type === 'Hero' || e.type === 'Barrel')
   const barrels = world.entities.filter(e => e.type === 'Barrel')
+  const ladderGates = world.entities.filter(e => e.type === 'LadderGate')
   for (const dyn of dynamicEntities) {
     let grounded = false
     for (const solid of solidEntities) {
@@ -79,18 +82,51 @@ function update(deltaTime: number) {
     if (grounded && dyn.transform.vy > 0) dyn.transform.vy = 0
   }
 
-  // Hero death on barrel contact (simple AABB overlap)
-  const hero = world.entities.find(e => e.type === 'Hero')
+  // Hero ladder attach/detach using ladder gates
+  const hero = world.entities.find(e => e.type === 'Hero') as any
   if (hero) {
+    let onGate = false
+    for (const g of ladderGates) {
+      if (
+        aabbIntersects(
+          { x: hero.transform.x, y: hero.transform.y, w: hero.transform.w, h: hero.transform.h },
+          { x: g.transform.x, y: g.transform.y, w: g.transform.w, h: g.transform.h }
+        )
+      ) {
+        onGate = true
+        break
+      }
+    }
+    hero.setOnLadderGate?.(onGate)
+    // Attach/detach based on input and gate presence
+    if (onGate && (isDown('ArrowUp') || isDown('ArrowDown'))) {
+      hero.setClimbing?.(true)
+      hero.transform.vx = 0
+    } else if (!isDown('ArrowUp') && !isDown('ArrowDown')) {
+      // Require key release at top/bottom (simplified)
+      hero.setClimbing?.(false)
+    }
+    hero.setOnGround?.(!!hero.transform.grounded)
+  }
+
+  // Hero death on barrel contact (simple AABB overlap)
+  // Hero deaths
+  const heroForDeath = world.entities.find(e => e.type === 'Hero')
+  if (heroForDeath) {
     for (const b of barrels) {
         if (aabbIntersects(
-          { x: hero.transform.x, y: hero.transform.y, w: hero.transform.w, h: hero.transform.h },
+          { x: heroForDeath.transform.x, y: heroForDeath.transform.y, w: heroForDeath.transform.w, h: heroForDeath.transform.h },
           { x: b.transform.x, y: b.transform.y, w: b.transform.w, h: b.transform.h }
         )) {
         onHeroDeath()
         break
       }
     }
+  }
+
+  // Simple stage clear: reach a y threshold near gorilla platform top
+  if (heroForDeath && heroForDeath.transform.y < 36) {
+    onStageClear()
   }
 }
 
@@ -113,6 +149,8 @@ export async function boot() {
     await initializeGameSystems()
 
     // Load initial stage (25m) and spawn entities
+    // Seed RNG for determinism
+    setSeed(0xC0FFEE)
     const stage = await loadStage('/src/level/stages/stage25m.json')
     spawnStageEntities(world, stage)
     
@@ -145,5 +183,12 @@ function onHeroDeath() {
   const store = useGameStore.getState()
   store.loseLife()
   // Simple respawn: reset world entities for now
+  if (world.stage) spawnStageEntities(world, world.stage)
+}
+
+function onStageClear() {
+  const store = useGameStore.getState()
+  store.nextLevel()
+  // For now, respawn the same stage and reset entities
   if (world.stage) spawnStageEntities(world, world.stage)
 }
