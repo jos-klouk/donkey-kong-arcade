@@ -5,6 +5,7 @@ import type { CompiledStage } from '../level/loader'
 import { loadStage } from '../level/loader'
 import { spawnStageEntities } from '../level/spawners'
 import { resolveAABBCollision } from '../physics/collide'
+import { intersects as aabbIntersects } from '../physics/aabb'
 
 const STEP = 1000 / 60 // 60 FPS fixed timestep
 let accumulator = 0
@@ -57,6 +58,7 @@ function update(deltaTime: number) {
   if (!world.stage) return
   const solidEntities = world.entities.filter(e => e.type === 'Platform')
   const dynamicEntities = world.entities.filter(e => e.type === 'Hero' || e.type === 'Barrel')
+  const barrels = world.entities.filter(e => e.type === 'Barrel')
   for (const dyn of dynamicEntities) {
     let grounded = false
     for (const solid of solidEntities) {
@@ -75,6 +77,20 @@ function update(deltaTime: number) {
     }
     dyn.transform.grounded = grounded
     if (grounded && dyn.transform.vy > 0) dyn.transform.vy = 0
+  }
+
+  // Hero death on barrel contact (simple AABB overlap)
+  const hero = world.entities.find(e => e.type === 'Hero')
+  if (hero) {
+    for (const b of barrels) {
+        if (aabbIntersects(
+          { x: hero.transform.x, y: hero.transform.y, w: hero.transform.w, h: hero.transform.h },
+          { x: b.transform.x, y: b.transform.y, w: b.transform.w, h: b.transform.h }
+        )) {
+        onHeroDeath()
+        break
+      }
+    }
   }
 }
 
@@ -123,4 +139,11 @@ async function initializeGameSystems() {
   await initRenderer()
   
   console.log('Game systems initialized')
+}
+
+function onHeroDeath() {
+  const store = useGameStore.getState()
+  store.loseLife()
+  // Simple respawn: reset world entities for now
+  if (world.stage) spawnStageEntities(world, world.stage)
 }
