@@ -4,6 +4,7 @@ import type { Entity } from '../ecs/types'
 import type { CompiledStage } from '../level/loader'
 import { loadStage } from '../level/loader'
 import { spawnStageEntities } from '../level/spawners'
+import { debugDraw } from '../render/canvases'
 import { resolveAABBCollision } from '../physics/collide'
 import { intersects as aabbIntersects } from '../physics/aabb'
 import { setSeed, next as rngNext } from './rng'
@@ -133,6 +134,7 @@ function update(deltaTime: number) {
 function render(alpha: number) {
   // Rendering with interpolation goes here
   // This will be implemented with the canvas rendering system
+  debugDraw(world.entities)
 }
 
 export async function boot() {

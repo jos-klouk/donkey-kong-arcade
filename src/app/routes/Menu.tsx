@@ -6,7 +6,7 @@ interface MenuProps {
 }
 
 const Menu: React.FC<MenuProps> = ({ onShowSettings }) => {
-  const { topScore, startGame } = useGameStore()
+  const { topScore } = useGameStore()
 
   return (
     <div className="menu-overlay">
@@ -22,7 +22,7 @@ const Menu: React.FC<MenuProps> = ({ onShowSettings }) => {
           className="menu-button primary"
           onClick={() => useGameStore.getState().setGameState('playing')}
         >
-          PRESS ENTER TO START
+          START GAME
         </button>
         
         <div style={{ marginTop: '1rem' }}>

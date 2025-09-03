@@ -77,7 +77,7 @@ function App() {
   }
 
   return (
-    <div id="root">
+    <div className="app">
       {renderCurrentScreen()}
       {showSettings && (
         <Settings onClose={() => setShowSettings(false)} />

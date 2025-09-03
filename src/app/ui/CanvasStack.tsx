@@ -63,16 +63,19 @@ const CanvasStack: React.FC = () => {
     <div ref={containerRef} className="canvas-stack">
       <canvas 
         ref={backgroundCanvasRef}
+        id="bg-canvas"
         className="game-canvas"
         style={{ zIndex: 1 }}
       />
       <canvas 
         ref={entitiesCanvasRef}
+        id="entities-canvas"
         className="game-canvas"
         style={{ zIndex: 2 }}
       />
       <canvas 
         ref={hudCanvasRef}
+        id="hud-canvas"
         className="game-canvas"
         style={{ zIndex: 3 }}
       />
