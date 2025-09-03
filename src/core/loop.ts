@@ -4,6 +4,7 @@ import type { Entity } from '../ecs/types'
 import type { CompiledStage } from '../level/loader'
 import { loadStage } from '../level/loader'
 import { spawnStageEntities } from '../level/spawners'
+import { resolveAABBCollision } from '../physics/collide'
 
 const STEP = 1000 / 60 // 60 FPS fixed timestep
 let accumulator = 0
@@ -49,9 +50,31 @@ export function stopLoop() {
 }
 
 function update(deltaTime: number) {
-  // Update all entities (physics integration happens inside entities for now)
-  for (const e of world.entities) {
-    e.update(deltaTime)
+  // Update entities
+  for (const e of world.entities) e.update(deltaTime)
+
+  // Very simple collision pass: resolve Hero/Barrel against platforms
+  if (!world.stage) return
+  const solidEntities = world.entities.filter(e => e.type === 'Platform')
+  const dynamicEntities = world.entities.filter(e => e.type === 'Hero' || e.type === 'Barrel')
+  for (const dyn of dynamicEntities) {
+    let grounded = false
+    for (const solid of solidEntities) {
+      const beforeY = dyn.transform.y
+      const res = resolveAABBCollision(
+        { x: dyn.transform.x, y: dyn.transform.y, w: dyn.transform.w, h: dyn.transform.h },
+        { x: solid.transform.x, y: solid.transform.y, w: solid.transform.w, h: solid.transform.h }
+      )
+      if (res.collided) {
+        // Apply correction back to transform
+        if (res.normalX !== 0) dyn.transform.x = Math.round(dyn.transform.x)
+        if (res.normalY !== 0) dyn.transform.y = Math.round(dyn.transform.y)
+        if (res.normalY === -1 && dyn.transform.y <= beforeY) grounded = true
+        if (dyn.onCollision) dyn.onCollision(res.normalX, res.normalY)
+      }
+    }
+    dyn.transform.grounded = grounded
+    if (grounded && dyn.transform.vy > 0) dyn.transform.vy = 0
   }
 }
 

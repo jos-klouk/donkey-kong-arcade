@@ -86,7 +86,7 @@ Tests
 Deliverables
 - [x] Level pipeline: Tiled JSON → compiler in `src/level/loader.ts` → compact arrays.
 - [x] Stage data in `src/level/stages/stage25m.json` (compiled form).
-- [ ] Entities: `Gorilla`, `Barrel`, `Platform`, `Ladder`, `LadderGate`.
+- [x] Entities: `Gorilla`, `Barrel`, `Platform`, `Ladder`, `LadderGate` (initial versions).
 - [ ] Barrel logic: roll, flip at walls, drop at edges; ladder decisions with cooldown.
 - [ ] Deaths, respawn, lives management; stage restart.
 

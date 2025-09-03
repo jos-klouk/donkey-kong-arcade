@@ -7,9 +7,10 @@ export interface Transform {
   vy: number
   w: number
   h: number
+  grounded?: boolean
 }
 
-export type EntityType = 'Hero' | 'Gorilla' | 'Barrel' | 'Fireball' | 'Item' | 'Platform' | 'Ladder' | 'Rivet'
+export type EntityType = 'Hero' | 'Gorilla' | 'Barrel' | 'Fireball' | 'Item' | 'Platform' | 'Ladder' | 'LadderGate' | 'Rivet'
 
 export interface Entity {
   id: EntityId
