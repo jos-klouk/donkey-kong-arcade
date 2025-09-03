@@ -65,10 +65,10 @@ Tests
 ## Phase 2: Physics & Collision
 
 Deliverables
-- [ ] AABB collision primitives in `src/physics/aabb.ts`.
-- [ ] Spatial hash grid in `src/physics/grid.ts` (cell size 16–32 px).
-- [ ] Collision resolution in `src/physics/collide.ts` for platforms/ladders/ladder gates.
-- [ ] Hero FSM (`idle`, `run`, `jump`, `fall`, `climb`, `hammer`, `hit/dead`) in `src/ecs/entities/Hero.ts`.
+- [x] AABB collision primitives in `src/physics/aabb.ts`.
+- [x] Spatial hash grid in `src/physics/grid.ts` (cell size 16–32 px).
+- [x] Collision resolution in `src/physics/collide.ts` for platforms/ladders/ladder gates.
+- [x] Hero FSM (`idle`, `run`, `jump`, `fall`, `climb`, `hammer`, `hit/dead`) in `src/ecs/entities/Hero.ts` (skeleton).
 - [ ] Sloped girder emulation: post-vertical nudge based on platform slope factor.
 
 Acceptance Criteria
