@@ -2,13 +2,14 @@
 import { useGameStore } from '../state/gameStore'
 import type { Entity } from '../ecs/types'
 import type { CompiledStage } from '../level/loader'
-import { loadStage } from '../level/loader'
+import { compileStage } from '../level/loader'
 import { spawnStageEntities } from '../level/spawners'
 import { debugDraw } from '../render/canvases'
 import { resolveAABBCollision } from '../physics/collide'
 import { intersects as aabbIntersects } from '../physics/aabb'
 import { setSeed, next as rngNext } from './rng'
 import { isDown } from '../input/keyboard'
+import stage25mData from '../level/stages/stage25m.json'
 
 const STEP = 1000 / 60 // 60 FPS fixed timestep
 let accumulator = 0
@@ -153,11 +154,13 @@ export async function boot() {
     // Load initial stage (25m) and spawn entities
     // Seed RNG for determinism
     setSeed(0xC0FFEE)
-    const stage = await loadStage('/src/level/stages/stage25m.json')
+    const stage = compileStage(stage25mData as any)
     spawnStageEntities(world, stage)
     
     store.setLoading(false)
     store.setGameState('menu')
+    // Start the main loop so render/debug draw runs
+    startLoop()
     
   } catch (error) {
     console.error('Failed to boot game:', error)
