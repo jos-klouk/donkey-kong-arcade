@@ -1,0 +1,57 @@
+{
+  "name": "donkey-kong-arcade",
+  "version": "0.1.0",
+  "description": "A faithful browser-based reinterpretation of the classic 1981 Donkey Kong arcade platformer",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:e2e": "playwright test",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --ext ts,tsx --fix"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "zustand": "^4.4.7",
+    "howler": "^2.2.3",
+    "localforage": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@types/howler": "^2.2.11",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8",
+    "vitest": "^1.0.4",
+    "@vitest/ui": "^1.0.4",
+    "playwright": "^1.40.1",
+    "@playwright/test": "^1.40.1"
+  },
+  "keywords": [
+    "donkey-kong",
+    "arcade",
+    "game",
+    "retro",
+    "platformer",
+    "canvas",
+    "typescript",
+    "react"
+  ],
+  "author": "Josh Ovinga",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joshovinga/donkey-kong-arcade.git"
+  },
+  "homepage": "https://github.com/joshovinga/donkey-kong-arcade#readme"
+}
