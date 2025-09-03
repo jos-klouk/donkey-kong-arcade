@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react'
+import { initRenderer } from '../../render/canvases'
 
 const CanvasStack: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -46,6 +47,7 @@ const CanvasStack: React.FC = () => {
     }
 
     setupCanvases()
+    initRenderer()
     
     // Handle window resize
     const handleResize = () => {
