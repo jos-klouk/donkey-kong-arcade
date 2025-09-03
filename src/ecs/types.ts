@@ -16,6 +16,7 @@ export interface Entity {
   type: EntityType
   transform: Transform
   update(dt: number): void
+  onCollision?(normalX: number, normalY: number): void
 }
 
 export interface FiniteStateMachine<State extends string> {

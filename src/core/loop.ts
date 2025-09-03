@@ -1,10 +1,20 @@
 // Game loop and initialization
 import { useGameStore } from '../state/gameStore'
+import type { Entity } from '../ecs/types'
+import type { CompiledStage } from '../level/loader'
+import { loadStage } from '../level/loader'
+import { spawnStageEntities } from '../level/spawners'
 
 const STEP = 1000 / 60 // 60 FPS fixed timestep
 let accumulator = 0
 let lastTime = performance.now()
 let isRunning = false
+
+// World state (very lightweight placeholder)
+const world: { entities: Entity[]; stage: CompiledStage | null } = {
+  entities: [],
+  stage: null
+}
 
 export function startLoop() {
   if (isRunning) return
@@ -39,8 +49,10 @@ export function stopLoop() {
 }
 
 function update(deltaTime: number) {
-  // Game logic updates go here
-  // This will be implemented with the game engine
+  // Update all entities (physics integration happens inside entities for now)
+  for (const e of world.entities) {
+    e.update(deltaTime)
+  }
 }
 
 function render(alpha: number) {
@@ -60,6 +72,10 @@ export async function boot() {
     
     // Initialize game systems
     await initializeGameSystems()
+
+    // Load initial stage (25m) and spawn entities
+    const stage = await loadStage('/src/level/stages/stage25m.json')
+    spawnStageEntities(world, stage)
     
     store.setLoading(false)
     store.setGameState('menu')

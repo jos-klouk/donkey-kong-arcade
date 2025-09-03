@@ -84,8 +84,8 @@ Tests
 ## Phase 3: Stage 1 (25m) MVP
 
 Deliverables
-- [ ] Level pipeline: Tiled JSON → compiler in `src/level/loader.ts` → compact arrays.
-- [ ] Stage data in `src/level/stages/stage25m.json` (compiled form).
+- [x] Level pipeline: Tiled JSON → compiler in `src/level/loader.ts` → compact arrays.
+- [x] Stage data in `src/level/stages/stage25m.json` (compiled form).
 - [ ] Entities: `Gorilla`, `Barrel`, `Platform`, `Ladder`, `LadderGate`.
 - [ ] Barrel logic: roll, flip at walls, drop at edges; ladder decisions with cooldown.
 - [ ] Deaths, respawn, lives management; stage restart.
@@ -306,5 +306,6 @@ Determinism
 ## Status Updates Log
 
 - 2025-09-03: Document created. Repo scaffolded and pushed to GitHub. Initial app shell and placeholders in place.
+
 
 
