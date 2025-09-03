@@ -52,6 +52,7 @@ function App() {
               <div className="pause-content">
                 <div className="pause-title">PAUSED</div>
                 <p>Press P to resume</p>
+                <p style={{ opacity: 0.7, fontSize: '0.9rem' }}>Tip: M mute · F fullscreen</p>
                 <button 
                   className="menu-button"
                   onClick={() => useGameStore.getState().resumeGame()}

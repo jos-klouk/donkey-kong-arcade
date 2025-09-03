@@ -45,15 +45,15 @@ Acceptance Criteria
 ## Phase 1: Core Bootstrap
 
 Deliverables
-- [/] Fixed-step loop in `src/core/loop.ts` with update/render separation and rAF driver.
-- [/] Multi-canvas stack (BG/Entities/HUD) with integer scaling and center letterboxing.
-- [/] Keyboard input system in `src/input/keyboard.ts` (preventDefault, edge events).
-- [ ] Pause on blur via Page Visibility API; resume prompt overlay.
+- [x] Fixed-step loop in `src/core/loop.ts` with update/render separation and rAF driver.
+- [x] Multi-canvas stack (BG/Entities/HUD) with integer scaling and center letterboxing.
+- [x] Keyboard input system in `src/input/keyboard.ts` (preventDefault, edge events).
+- [x] Pause on blur via Page Visibility API; resume prompt overlay.
 
 Acceptance Criteria
-- [ ] Resize recomputes integer scale, disabled smoothing, canvas centered.
-- [ ] Input edge events correct; scrolling never occurs on game keys.
-- [ ] Loop ticks at 60 Hz fixed; render interpolates; no time creep.
+- [x] Resize recomputes integer scale, disabled smoothing, canvas centered.
+- [x] Input edge events correct; scrolling never occurs on game keys.
+- [x] Loop ticks at 60 Hz fixed; render interpolates; no time creep.
 
 Tests
 - [ ] Vitest: loop advances consistent ticks for simulated time.

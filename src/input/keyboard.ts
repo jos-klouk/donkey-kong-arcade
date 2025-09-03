@@ -27,6 +27,33 @@ function handleKeyDown(e: KeyboardEvent) {
     justPressed.add(e.code)
   }
   pressed.add(e.code)
+
+  // Handle one-shot toggles on keydown (ignore auto-repeat)
+  if (!e.repeat) {
+    const store = useGameStore.getState()
+    const { gameState, pauseGame, resumeGame, updateSettings, settings } = store
+
+    switch (e.code) {
+      case 'KeyP': {
+        if (gameState === 'playing') {
+          pauseGame()
+        } else if (gameState === 'paused') {
+          resumeGame()
+        }
+        break
+      }
+      case 'KeyM': {
+        updateSettings({ mute: !settings.mute })
+        break
+      }
+      case 'KeyF': {
+        toggleFullscreen()
+        break
+      }
+      default:
+        break
+    }
+  }
 }
 
 function handleKeyUp(e: KeyboardEvent) {
@@ -67,3 +94,15 @@ export function endFrame() {
 
 // Import useGameStore for visibility change handling
 import { useGameStore } from '../state/gameStore'
+
+function toggleFullscreen() {
+  const doc: any = document
+  const el: any = document.documentElement
+  if (!doc.fullscreenElement && !doc.webkitFullscreenElement) {
+    if (el.requestFullscreen) el.requestFullscreen()
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen()
+  } else {
+    if (doc.exitFullscreen) doc.exitFullscreen()
+    else if (doc.webkitExitFullscreen) doc.webkitExitFullscreen()
+  }
+}
